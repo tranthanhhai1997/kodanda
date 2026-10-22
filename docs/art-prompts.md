@@ -43,7 +43,7 @@ Thêm theo bối cảnh: rừng đạo sĩ có đền nhỏ (dawn/day), rừng P
 
 ---
 
-# Đợt 2 — thêm nhân vật & ảnh bìa (đề xuất 22/10)
+# Đợt 2 — thêm nhân vật & ảnh bìa (✅ đã gắn 22/10: quỷ đất ×3, quỷ giáp, Kumbhakarna, Lakshmana trợ chiến, ảnh bìa)
 
 Đợt 1 đã gắn vào game (`img/sprites/`, `img/bg/`). Hiện **quỷ đất, quỷ giáp và Kumbhakarna** vẫn dùng ảnh tạm từ RamSetu (phong cách hơi khác) — game đang tạm đổi màu ngẫu nhiên để đỡ trùng lặp. Nên tạo thêm các ảnh dưới đây, **cùng cuộc trò chuyện ChatGPT đã tạo đợt 1** để giữ phong cách.
 

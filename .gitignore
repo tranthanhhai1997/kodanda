@@ -2,4 +2,5 @@
 .claude/
 # Ảnh gốc độ phân giải cao (game chỉ dùng bản .webp đã nén)
 img/ramayana_sprite_pack/
+img/ramayana_round2_assets/
 img/**/*.png

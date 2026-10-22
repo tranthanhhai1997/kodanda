@@ -269,7 +269,7 @@ var CONTENT = {
     ending: ['The Brahmastra pierces Ravana. The ten-headed king falls and Lanka is freed.','Rama… I knew you would come.','Let us go home, Sita. Ayodhya is lighting lamps for us.','The epic journey continues — watch Ramayana on the big screen!'],
     bosses: { tataka:{ name:'Tataka', intro:'👹 The demoness TATAKA appears!' }, maricha:{ name:'Maricha', intro:'🦌 Golden deer MARICHA — find the real one!' }, kumbha:{ name:'Kumbhakarna', intro:'💤 KUMBHAKARNA has awakened!' }, ravana:{ name:'Ravana', intro:'👑 Demon king RAVANA appears!' } },
     astras: { agneya:'A rain of fire arrows over the battlefield', varuna:'A tidal wave pushes back ground demons', vayavya:'A divine wind sweeps away flyers and fireballs', brahma:'The ultimate weapon — destroys common demons, cripples bosses' },
-    upgrades: { hp:['Ayodhya Armor','+1 max health per level.'], charge:['Divine Bowstring','Charge 15% faster per level.'], golden:['Golden Arrows','Golden arrows come 1 shot sooner per level.'], energy:['Meditation','+15 starting divine power per level.'], aim:['Garuda’s Eye','Aim guide 50% longer per level.'] },
+    upgrades: { hp:['Ayodhya Armor','+1 max health per level.'], charge:['Divine Bowstring','Charge 15% faster per level.'], golden:['Golden Arrows','Golden arrows come 1 shot sooner per level.'], energy:['Meditation','+15 starting divine power per level.'], aim:['Garuda’s Eye','Aim guide 50% longer per level.'], ally:['Lakshmana’s Aid','Lakshmana kneels beside Rama and shoots on his own; level 2 fires faster.'] },
     outfits: { saffron:'Royal saffron', vanvas:'Exile bark robe', royal:'Ayodhya ruby', victory:'Triumphant platinum' },
     trails: { none:'Default', lotus:'Lotus petals', azure:'Divine azure', sun:'Halo' },
     ach: {
@@ -317,7 +317,7 @@ var CONTENT = {
     bosses: { tataka:{ name:'ताड़का', intro:'👹 राक्षसी ताड़का प्रकट हुई!' }, maricha:{ name:'मारीच', intro:'🦌 स्वर्ण मृग मारीच — असली को खोजें!' }, kumbha:{ name:'कुंभकर्ण', intro:'💤 कुंभकर्ण जाग उठा!' }, ravana:{ name:'रावण', intro:'👑 राक्षसराज रावण प्रकट हुआ!' } },
     astraNames: { agneya:'आग्नेयास्त्र', varuna:'वरुणास्त्र', vayavya:'वायव्यास्त्र', brahma:'ब्रह्मास्त्र' },
     astras: { agneya:'रणभूमि पर अग्नि बाणों की वर्षा', varuna:'जल लहर भूमि के राक्षसों को पीछे धकेलती है', vayavya:'दिव्य पवन उड़ने वाले राक्षस और अग्नि गोले उड़ा देती है', brahma:'परम अस्त्र — सामान्य राक्षसों का नाश, महाराक्षस को भारी क्षति' },
-    upgrades: { hp:['अयोध्या कवच','हर स्तर पर +1 अधिकतम जीवन।'], charge:['दिव्य प्रत्यंचा','हर स्तर पर 15% तेज़ शक्ति।'], golden:['स्वर्ण तीर','हर स्तर पर स्वर्ण तीर 1 तीर पहले।'], energy:['ध्यान','हर स्तर पर +15 आरंभिक दिव्य शक्ति।'], aim:['गरुड़ दृष्टि','हर स्तर पर निशाना पथ 50% लंबा।'] },
+    upgrades: { hp:['अयोध्या कवच','हर स्तर पर +1 अधिकतम जीवन।'], charge:['दिव्य प्रत्यंचा','हर स्तर पर 15% तेज़ शक्ति।'], golden:['स्वर्ण तीर','हर स्तर पर स्वर्ण तीर 1 तीर पहले।'], energy:['ध्यान','हर स्तर पर +15 आरंभिक दिव्य शक्ति।'], aim:['गरुड़ दृष्टि','हर स्तर पर निशाना पथ 50% लंबा।'], ally:['लक्ष्मण की सहायता','लक्ष्मण राम के पास घुटनों पर बैठकर स्वयं तीर चलाते हैं; स्तर 2 पर और तेज़।'] },
     outfits: { saffron:'राजसी केसरिया', vanvas:'वनवास वल्कल', royal:'अयोध्या माणिक', victory:'विजयी प्लैटिनम' },
     trails: { none:'सामान्य', lotus:'कमल पंखुड़ियाँ', azure:'दिव्य नीला', sun:'प्रभामंडल' },
     ach: {

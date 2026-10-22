@@ -28,6 +28,7 @@ function newSession(L){
     arrows: [], demons: [], parts: [], floats: [], powerups: [], fireballs: [], waves: [],
     angle: -0.32, power: 0, charging: false, chargeDir: 1,
     fireUntil: 0, puT: 6, bossSpawned: false, bossRef: null,
+    allyT: 2.5,
     energy: mod === 'astra' ? 100 : Math.min(100, ENERGY.start + 15 * upLv('energy')), rain: null, windFx: 0, bigFlash: 0, hitStop: 0, slowmo: 0,
     shake: 0, flash: 0, time: 0, over: false, revived: false
   };
@@ -380,6 +381,29 @@ function nextWave(){
   if(typeof onWaveCleared === 'function') onWaveCleared(G.wave - 1);
 }
 
+/* ---------------- Lakshmana trợ chiến: tự ngắm quỹ đạo cầu vào quỷ gần vạch nhất ---------------- */
+function allyGrip(){
+  var A = ART.ally, im = getImg(A.src);
+  if(!im) return null;
+  var w = A.h * im.naturalWidth / im.naturalHeight;
+  return { x: A.x - w / 2 + A.grip[0] * w, y: GROUND - 2 - A.h + A.grip[1] * A.h };
+}
+function fireAlly(){
+  var g = allyGrip(); if(!g) return;
+  var tg = null;
+  G.demons.forEach(function(d){ if(!d.dead && d.type !== 'decoy' && d.x > g.x + 40 && (!tg || d.x < tg.x)) tg = d; });
+  if(!tg) return;
+  var tx = tg.x, ty = bodyY(tg);
+  if(tg.id === 'ravana'){ var hd = tg.exposed ? null : ravanaHeads(tg).filter(function(h){ return h.h.hp > 0; })[0]; var c = hd || ravanaChest(tg); tx = c.x; ty = c.y; }
+  var v = 880, gr = 620, dx = tx - g.x;
+  dx -= (tg.spd || 0) * dx / v * (tg.type === 'boss' ? 0 : 1);   // đón đầu quỷ đang tiến tới
+  var dy = g.y - ty, disc = v * v * v * v - gr * (gr * dx * dx + 2 * dy * v * v);
+  if(disc < 0 || dx <= 0) return;
+  var th = Math.atan((v * v - Math.sqrt(disc)) / (gr * dx));
+  G.arrows.push({ x: g.x, y: g.y, vx: v * Math.cos(th), vy: -v * Math.sin(th), astra: true, ally: true, pierce: 0, dead: false, hitSet: [] });
+  G.allyShot = elapsed; sShoot();
+}
+
 /* ---------------- update ---------------- */
 function update(dt){
   if(G.hitStop > 0){ G.hitStop -= dt; return; }          // khựng hình khi trúng đòn nặng
@@ -407,6 +431,8 @@ function update(dt){
       G.spawned++; G.toSpawn--;
     }
   }
+
+  if(upLv('ally') > 0){ G.allyT -= dt; if(G.allyT <= 0){ G.allyT = upLv('ally') >= 2 ? 1.6 : 2.6; fireAlly(); } }
 
   // Agneyastra: mưa tên lửa
   if(G.rain){
@@ -898,6 +924,14 @@ function drawRamaSprite(tm){
   return true;
 }
 
+function drawAlly(){
+  var A = ART.ally, im = getImg(A.src);
+  if(!im) return;
+  var w = A.h * im.naturalWidth / im.naturalHeight;
+  ctx.drawImage(im, A.x - w / 2, GROUND - 2 - A.h, w, A.h);
+  if(G.allyShot != null && elapsed - G.allyShot < .15){ var g = allyGrip(); ctx.beginPath(); ctx.arc(g.x, g.y, 7, 0, 7); ctx.fillStyle = '#ffe9a8'; ctx.fill(); }
+}
+
 function hpBar(x, y, w, frac){
   ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.fillRect(x - w / 2, y, w, 6);
   ctx.fillStyle = frac > .5 ? '#43d68a' : (frac > .25 ? '#f5b942' : '#ff5d6c');
@@ -1132,6 +1166,7 @@ function draw(){
   if(G && G.shake > 0) ctx.translate(rand(-G.shake, G.shake) * .5, rand(-G.shake, G.shake) * .5);
   drawBackground(bgL, elapsed);
   drawRama(elapsed);
+  if(G && upLv('ally') > 0) drawAlly();
   if(G){
     // powerups
     G.powerups.forEach(function(q){
@@ -1222,4 +1257,5 @@ function draw(){
 for(var ak in ART.demons) (ART.demons[ak].srcs || [ART.demons[ak].src]).forEach(getImg);
 ['idle', 'draw', 'release'].forEach(function(p){ ramaImg(p); });
 if(ART.ravana) getImg(ART.ravana.src);
+if(ART.ally) getImg(ART.ally.src);
 for(var bk in ART.bg) getImg(ART.bg[bk]);

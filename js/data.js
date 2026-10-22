@@ -133,7 +133,8 @@ var UPGRADES = [
   { id:'charge', icon:'🏹', name:'Dây cung thần',    desc:'Dồn lực nhanh hơn 15% mỗi cấp.',               prices:[200, 450, 900] },
   { id:'golden', icon:'✨', name:'Tên vàng',         desc:'Tên vàng xuất hiện sớm hơn 1 phát mỗi cấp.',   prices:[400, 1000] },
   { id:'energy', icon:'🔆', name:'Thiền định',       desc:'+15 thần lực khởi đầu mỗi cấp.',               prices:[250, 600, 1200] },
-  { id:'aim',    icon:'🦅', name:'Mắt Garuda',       desc:'Đường ngắm dài thêm 50% mỗi cấp.',             prices:[200, 500] }
+  { id:'aim',    icon:'🦅', name:'Mắt Garuda',       desc:'Đường ngắm dài thêm 50% mỗi cấp.',             prices:[200, 500] },
+  { id:'ally',   icon:'🗡️', name:'Lakshmana trợ chiến', desc:'Lakshmana quỳ cạnh Rama, tự bắn hỗ trợ; cấp 2 bắn nhanh hơn.', prices:[600, 1500] }
 ];
 /* Trang phục Rama — màu cho bản vẽ bằng code, filter (bộ lọc CSS) cho ảnh Rama */
 var OUTFITS = [
@@ -200,8 +201,8 @@ var ART = {
   // k: chiều cao vẽ = r × k · flip: ảnh gốc quay mặt sang phải · center: neo giữa (quỷ bay)
   // tints: biến thể màu (bộ lọc CSS) chọn ngẫu nhiên cho từng con · srcs: nhiều ảnh khác nhau, chọn ngẫu nhiên
   demons: {
-    ground:   { src:'img/ui/rakshasa.webp',            k:2.9, tints:[null, 'hue-rotate(110deg) saturate(1.2)', 'hue-rotate(-70deg) saturate(1.3)', 'hue-rotate(200deg)', 'hue-rotate(55deg) brightness(1.1)'] },
-    armor:    { src:'img/ui/rakshasa-boss.webp',       k:3.0, tints:[null, 'hue-rotate(160deg)', 'hue-rotate(-40deg) saturate(1.3)'] },
+    ground:   { srcs:['img/sprites/demon_ground_1.webp', 'img/sprites/demon_ground_2.webp', 'img/sprites/demon_ground_3.webp'], k:3.2 },
+    armor:    { src:'img/sprites/demon_armor.webp',    k:3.2 },
     fast:     { src:'img/sprites/demon_fast.webp',     k:3.2, tints:[null, 'hue-rotate(-30deg)', 'hue-rotate(250deg) saturate(1.2)'] },
     fly:      { src:'img/sprites/demon_fly.webp',      k:4.2, center:true, tints:[null, 'hue-rotate(160deg)', 'hue-rotate(-90deg)'] },
     shield:   { src:'img/sprites/demon_shield.webp',   k:3.3 },
@@ -210,8 +211,10 @@ var ART = {
     tataka:   { src:'img/sprites/boss_tataka.webp',    k:3.7 },
     maricha:  { src:'img/sprites/boss_maricha.webp',   k:3.9 },
     decoy:    { src:'img/sprites/boss_maricha.webp',   k:3.9 },
-    kumbha:   { src:'img/ui/rakshasa-boss.webp',       k:3.0, tints:['hue-rotate(230deg) saturate(.8) brightness(.9)'] }
+    kumbha:   { src:'img/sprites/boss_kumbhakarna.webp', k:3.2 }
   },
+  // Lakshmana trợ chiến (nâng cấp 'ally'): x = tâm chân, grip = tay cầm cung (tỉ lệ ảnh)
+  ally: { src:'img/sprites/ally_lakshmana.webp', h:112, x:205, grip:[.93, .33] },
   // Ravana: heads = tâm từng đầu (tỉ lệ theo ảnh), hr = bán kính đầu, chest = điểm yếu
   ravana: { src:'img/sprites/boss_ravana.webp', h:300, hr:.05, chest:[.5, .36],
             heads:[[.144,.145],[.228,.137],[.306,.134],[.389,.122],[.5,.111],[.606,.122],[.683,.134],[.761,.137],[.839,.145]] },
