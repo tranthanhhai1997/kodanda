@@ -81,3 +81,12 @@ Chỉ cần sửa `js/data.js`:
 
 - Thêm/sửa ảnh: chuyển sang WebP rồi khai báo trong `ART` (`js/data.js`). Quỷ: `k` = tỉ lệ chiều cao ảnh so với bán kính va chạm; Ravana: `heads` = tâm từng đầu (vùng trúng tên) theo tỉ lệ ảnh.
 - Trang phục Rama dùng bộ lọc màu (`OUTFITS[].filter`) trên ảnh — trình duyệt cũ không hỗ trợ sẽ hiện màu gốc.
+
+## Bộ ba game Ramayana
+
+| Game | Mô tả | Link |
+|---|---|---|
+| 🏹 **Kodanda** | Rama bắn cung diệt quỷ *(game này)* | [tranthanhhai1997/kodanda](https://github.com/tranthanhhai1997/kodanda) |
+| 🌊 **Ram Setu** | Ném đá xây cầu vượt biển | [tranthanhhai1997/ram-setu](https://github.com/tranthanhhai1997/ram-setu) |
+| 🐒 **Hanuman Bay Qua Biển** | Hanuman vượt đại dương | [tranthanhhai1997/hanuman-bay-qua-bien](https://github.com/tranthanhhai1997/hanuman-bay-qua-bien) |
+
