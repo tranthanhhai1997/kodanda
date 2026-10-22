@@ -1,0 +1,19 @@
+{
+  "id": "./",
+  "name": "Bắn Cung Diệt Quỷ — Rama & cung thần Kodanda",
+  "short_name": "Kodanda",
+  "description": "Game bắn cung theo sử thi Ramayana: 15 màn, 4 boss, thần tiễn, chế độ Vô tận và Thử thách ngày.",
+  "lang": "vi",
+  "start_url": "./?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#0d1220",
+  "theme_color": "#0d1220",
+  "categories": ["games", "entertainment"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

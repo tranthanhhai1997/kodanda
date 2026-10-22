@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark light" />
+    <link rel="icon" href="icons/icon-192.png" type="image/png" />
+    <title>Game Bắn Cung Diệt Quỷ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800;900&family=Playfair+Display:wght@700;800&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet" />
+    <meta name="theme-color" content="#0d1220" />
+    <meta name="description" content="Game bắn cung theo sử thi Ramayana: cùng Rama và cây cung thần Kodanda diệt quỷ Rakshasa qua 15 màn, 4 boss, chế độ Vô tận và Thử thách ngày." />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+    <meta property="og:title" content="Bắn Cung Diệt Quỷ — Rama & cung thần Kodanda" />
+    <meta property="og:image" content="img/ui/og-kodanda.jpg" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <!-- ======= TOOLBAR ======= -->
+      <div class="toolbar">
+        <div class="brand">
+          <img class="bow-ic" src="img/ui/emblem.webp" alt="" width="40" height="40" />
+          <span><span data-i18n="brand">Bắn Cung Diệt Quỷ</span><small data-i18n="brand_sub">Rama &amp; cây cung thần Kodanda — bảo vệ bìa rừng khỏi quỷ Rakshasa</small></span>
+        </div>
+        <div class="tools">
+          <select class="langsel" id="langSel" data-i18n-title="lang_t"></select>
+          <div class="seg" role="group" data-i18n-title="diff_t">
+            <button type="button" data-diff="easy">Dễ</button>
+            <button type="button" data-diff="normal" class="on">Thường</button>
+            <button type="button" data-diff="hard">Khó</button>
+          </div>
+          <span class="chip" id="coinChip" data-i18n-title="coin_t">🪙 <span class="coin" id="coinCount">0</span> <span data-i18n="coin_unit">xu</span></span>
+          <button class="iconbtn" id="soundBtn" type="button" data-i18n-title="sound_t">🔊</button>
+          <button class="iconbtn" id="rewardMenuBtn" type="button" data-i18n-title="ad_coin_t">📺</button>
+          <button class="iconbtn" id="installBtn" type="button" data-i18n-title="install" hidden>📲</button>
+          <button class="iconbtn" id="fsBtn" type="button" data-i18n-title="fs_t">⛶</button>
+        </div>
+      </div>
+
+      <!-- ======= STAGE ======= -->
+      <div class="stage" id="stage">
+        <canvas id="game" width="960" height="540"></canvas>
+
+        <div class="hud" id="hud" hidden>
+          <div class="group">
+            <div class="hudbox"><span class="lbl" data-i18n="hud_level">MÀN</span><span id="hudLevel"></span></div>
+            <div class="hudbox"><span class="lbl" data-i18n="hud_hp">SINH LỰC</span><span class="hearts" id="hudHearts">❤️❤️❤️❤️</span></div>
+            <div class="hudbox"><span class="lbl" data-i18n="hud_energy">THẦN LỰC</span><span class="progress energy"><i id="hudEnergy"></i></span></div>
+          </div>
+          <div class="group">
+            <div class="hudbox"><span class="lbl"><span data-i18n="hud_kill">QUỶ ĐÃ DIỆT</span> <span id="hudKill">0/12</span></span><span class="progress"><i id="hudProg"></i></span></div>
+            <div class="hudbox"><span class="lbl" data-i18n="hud_score">ĐIỂM</span><span id="hudScore">0</span></div>
+            <button class="hudbtn" id="hudFsBtn" type="button" data-i18n-title="fs_t">⛶</button>
+            <button class="hudbtn" id="pauseBtn" type="button" data-i18n-title="pause_t">⏸</button>
+          </div>
+        </div>
+
+        <div class="astrabar" id="astraBar" hidden></div>
+
+        <!-- STORY -->
+        <div class="overlay story" id="storyOverlay" hidden>
+          <div class="dlg" role="dialog" aria-live="polite">
+            <div class="dlg-pic" id="dlgPic"></div>
+            <div class="dlg-body">
+              <div class="dlg-name" id="dlgName"></div>
+              <p id="dlgText"></p>
+              <div class="dlg-foot">
+                <span class="dlg-step" id="dlgStep"></span>
+                <button class="btn ghost sm" id="dlgSkip" type="button" data-i18n="skip">Bỏ qua</button>
+                <button class="btn sm" id="dlgNext" type="button">Tiếp ▶</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MENU -->
+        <div class="overlay" id="menuOverlay">
+          <div class="panel menu-panel">
+            <img class="menu-emblem" src="img/ui/emblem.webp" alt="" width="84" height="84" />
+            <h2 data-i18n="menu_title">Cung Thần Diệt Quỷ</h2>
+            <p data-i18n-html="menu_intro_html">Hoàng tử <b style="color:var(--ink)">Rama</b> giương cây cung thần <b style="color:var(--ink)">Kodanda</b> qua 3 chương sử thi — từ khu rừng đạo sĩ tới chiến trường Lanka. Kéo / chạm giữ để ngắm và dồn lực, thả ra để bắn!</p>
+            <div class="chtabs" id="chTabs"></div>
+            <p class="chdesc" id="chDesc"></p>
+            <div class="lvlgrid" id="lvlGrid"></div>
+            <p class="hintline" data-i18n-html="menu_hint_html">Mẹo: thả cung khi thanh lực vào <b>vùng xanh</b> = phát HOÀN HẢO · bắn trúng đầu = CHÍ MẠNG · tích <b>thần lực</b> để gọi Astra (phím 1–4).</p>
+            <div class="btnrow">
+              <button class="btn" id="playBtn" type="button">▶ Chơi màn 1</button>
+              <button class="btn ad sm" id="rewardMenuBtn2" type="button" data-i18n="ad_coins_btn">📺 Xem QC nhận 30 xu</button>
+            </div>
+            <div class="metarow">
+              <button class="mbtn" id="shopBtn" type="button" data-i18n="m_shop">🛒 Cửa hàng</button>
+              <button class="mbtn" id="journeyBtn" type="button"><span data-i18n="m_journey">🏆 Hành trình</span> <span class="badge" id="journeyBadge" hidden>0</span></button>
+              <button class="mbtn" id="dailyRewardBtn" type="button"><span data-i18n="m_daily">🎁 Quà ngày</span> <span class="dot" id="dailyDot" hidden></span></button>
+              <button class="mbtn" id="endlessBtn" type="button" data-i18n="m_endless">♾️ Vô tận</button>
+              <button class="mbtn" id="dailyBtn" type="button">⚔️ Thử thách ngày</button>
+              <button class="mbtn" id="shareBtn" type="button" data-i18n="m_share">📤 Chia sẻ</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- WIN -->
+        <div class="overlay" id="winOverlay" hidden>
+          <div class="panel">
+            <h3 data-i18n="win_title">🎉 Chiến thắng!</h3>
+            <p class="winlvl" id="winLvlName"></p>
+            <div class="bigstars" id="winStars">★★★</div>
+            <div class="result-stats">
+              <div class="rstat"><b id="winScore">0</b><span data-i18n="win_score">Điểm màn</span></div>
+              <div class="rstat"><b id="winCoins">0</b><span data-i18n="win_coins">Xu kiếm được</span></div>
+              <div class="rstat"><b id="winAcc">0%</b><span data-i18n="win_acc">Độ chính xác</span></div>
+            </div>
+            <div class="btnrow">
+              <button class="btn ad sm" id="doubleBtn" type="button">📺 Xem QC — nhân đôi xu</button>
+              <button class="btn" id="nextBtn" type="button">Màn tiếp theo ▶</button>
+              <button class="btn ghost sm" id="shareWinBtn" type="button" data-i18n="share_win">📤 Khoe kết quả</button>
+              <button class="btn ghost sm" id="winMenuBtn" type="button" data-i18n="pick_lvl">Chọn màn</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOSE -->
+        <div class="overlay" id="loseOverlay" hidden>
+          <div class="panel">
+            <h3 data-i18n="lose_title">💀 Vạch phòng thủ đã vỡ…</h3>
+            <p id="loseText">Lũ quỷ tràn qua bìa rừng. Nhưng đừng bỏ cuộc — xem một quảng cáo ngắn để Rama hồi sinh với 3 sinh lực và đẩy lùi toàn bộ quỷ đang áp sát.</p>
+            <div class="result-stats">
+              <div class="rstat"><b id="loseKill">0</b><span id="loseKillLbl" data-i18n="lose_kill">Quỷ đã diệt</span></div>
+              <div class="rstat"><b id="loseScore">0</b><span data-i18n="score">Điểm</span></div>
+            </div>
+            <div class="btnrow">
+              <button class="btn ad" id="reviveBtn" type="button">📺 Xem QC — Hồi sinh</button>
+              <button class="btn" id="retryBtn" type="button" data-i18n="retry">↻ Chơi lại</button>
+              <button class="btn ghost sm" id="loseShareBtn" type="button" data-i18n="share_record" hidden>📤 Khoe kỷ lục</button>
+              <button class="btn ghost sm" id="loseMenuBtn" type="button" data-i18n="pick_lvl">Chọn màn</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SHOP -->
+        <div class="overlay" id="shopOverlay" hidden>
+          <div class="panel wide">
+            <h3><span data-i18n="shop_title">🛒 Cửa hàng</span> <span class="chip sm">🪙 <span id="shopCoins">0</span></span></h3>
+            <div class="chtabs">
+              <button class="chtab" type="button" data-tab="up" data-i18n="tab_up">Nâng cấp cung</button>
+              <button class="chtab" type="button" data-tab="outfit" data-i18n="tab_outfit">Trang phục</button>
+              <button class="chtab" type="button" data-tab="trail" data-i18n="tab_trail">Vệt tên</button>
+            </div>
+            <div id="shopList"></div>
+            <div class="btnrow"><button class="btn ghost sm" type="button" data-back data-i18n="back">← Quay lại</button></div>
+          </div>
+        </div>
+
+        <!-- JOURNEY: thành tựu & thẻ -->
+        <div class="overlay" id="journeyOverlay" hidden>
+          <div class="panel wide">
+            <h3 data-i18n="journey_title">🏆 Hành trình của Rama</h3>
+            <div class="chtabs">
+              <button class="chtab" type="button" data-tab="ach" data-i18n="tab_ach">Thành tựu</button>
+              <button class="chtab" type="button" data-tab="cards" data-i18n="tab_cards">Thẻ nhân vật</button>
+            </div>
+            <div id="journeyList"></div>
+            <div class="btnrow"><button class="btn ghost sm" type="button" data-back data-i18n="back">← Quay lại</button></div>
+          </div>
+        </div>
+
+        <!-- DAILY REWARD -->
+        <div class="overlay" id="dailyOverlay" hidden>
+          <div class="panel">
+            <h3 data-i18n="daily_title">🎁 Quà hằng ngày</h3>
+            <p id="dailyInfo"></p>
+            <div class="dgrid" id="dailyGrid"></div>
+            <div class="btnrow">
+              <button class="btn" id="dailyClaimBtn" type="button">🎁 Nhận quà</button>
+              <button class="btn ad sm" id="dailyDoubleBtn" type="button" data-i18n="daily_double" hidden>📺 Xem QC — nhân đôi</button>
+              <button class="btn ghost sm" type="button" data-back data-i18n="close">Đóng</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="rotate-hint"><span data-i18n="rotate_hint">📱 Xoay ngang và bấm ⛶ để chơi toàn màn hình</span><button type="button" id="rotateClose" aria-label="Đóng">✕</button></div>
+
+        <!-- PAUSE -->
+        <div class="overlay" id="pauseOverlay" hidden>
+          <div class="panel">
+            <h3 data-i18n="pause_title">⏸ Tạm dừng</h3>
+            <p data-i18n="pause_text">Rama đang nín thở chờ lệnh của bạn.</p>
+            <div class="btnrow">
+              <button class="btn" id="resumeBtn" type="button" data-i18n="resume">▶ Chơi tiếp</button>
+              <button class="btn ghost sm" id="pauseMenuBtn" type="button" data-i18n="pick_lvl">Chọn màn</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="toast" id="toast"></div>
+      </div>
+
+      <!-- ======= BANNER AD (mô phỏng) ======= -->
+      <div class="ad-banner" role="complementary" aria-label="Quảng cáo banner mô phỏng">
+        <div class="fake"><span class="adtag" data-i18n="banner_tag">Quảng cáo · Banner 728×90</span><br /><span data-i18n="banner_text">🏹 Game hay mỗi ngày tại GameVui Hub</span> <small data-i18n="banner_small">Chơi miễn phí — không cần cài đặt · Vị trí banner dưới khung game, hiển thị suốt phiên chơi</small></div>
+        <button class="cta" type="button" id="bannerCta" data-i18n="banner_cta">Chơi ngay</button>
+      </div>
+
+      <!-- ======= INFO ======= -->
+      <section class="info">
+        <h2 data-i18n-html="info1_title_html">Khải huyền <span class="accent">Ramayana</span> — cây cung thần Kodanda</h2>
+        <p data-i18n-html="info1_html">Trong sử thi Ramayana, Rama là hoàng tử thành Ayodhya, hiện thân của thần Vishnu. Tại lễ chọn rể của công chúa Sita, chàng là người duy nhất giương nổi cây cung của thần Shiva mà vua Janaka gìn giữ — và kéo gãy nó ngay tại lễ đường. Sau hôn lễ, Rama nhận cây cung thần <b>Kodanda</b> từ đạo sĩ Parashurama và mang theo trong suốt hành trình. Khi quỷ vương Ravana bắt cóc Sita về đảo Lanka, Rama lên đường giải cứu cùng em trai Lakshmana, đội quân khỉ của Hanuman và cây cầu đá Ram Setu bắc qua biển. Trong game này, bạn vào vai Rama ở tuyến đầu bìa rừng: mỗi mũi tên là một lần đẩy lùi bầy Rakshasa đang tràn tới trước khi chúng chạm vạch phòng thủ.</p>
+        <div class="cols">
+          <div class="card">
+            <span class="ic">🎯</span>
+            <h3 data-i18n="card_play">Cách chơi</h3>
+            <ul data-i18n-html="card_play_html">
+              <li><b>Kéo chuột / chạm &amp; giữ</b> trên khung game để ngắm — chấm quỹ đạo hiện theo lực kéo, thả ra để bắn.</li>
+              <li>Bàn phím: <span class="kbd">↑</span><span class="kbd">↓</span> chỉnh góc, giữ <span class="kbd">Space</span> dồn lực, thả để bắn, <span class="kbd">1</span>–<span class="kbd">4</span> gọi thần tiễn, <span class="kbd">P</span> tạm dừng.</li>
+              <li><b>Hoàn hảo</b>: thả khi thanh lực vào vùng xanh (+1 sát thương) · <b>Chí mạng</b>: trúng đầu quỷ (+1 sát thương).</li>
+              <li>Quỷ chạm vạch đỏ bên trái = mất 1 sinh lực. Hết sinh lực là thua màn.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <span class="ic">👹</span>
+            <h3 data-i18n="card_demons">Quỷ, boss &amp; vật phẩm</h3>
+            <ul data-i18n-html="card_demons_html">
+              <li><b>Quỷ đất · bay · tốc độ · giáp</b> · <b>Quỷ khiên</b> chặn tên bay thẳng — bắn vòng cầu · <b>Quỷ phân thân</b> tách đôi · <b>Pháp sư</b> hồi máu đồng bọn.</li>
+              <li><b>4 boss</b>: Tataka ném đá tảng · nai vàng Maricha phân thân ảo ảnh · Kumbhakarna dậm đất · Ravana mười đầu mọc lại.</li>
+              <li><b>Tên vàng</b> mỗi phát thứ 5 (×2, xuyên khiên) · <b>cầu lửa thiêng</b> cho Tên Lửa 12 giây · <b>trái tim</b> hồi 1 sinh lực.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <span class="ic">☀️</span>
+            <h3 data-i18n="card_astra">Thần tiễn &amp; chấm sao</h3>
+            <ul data-i18n-html="card_astra_html">
+              <li><b>Agneyastra</b> mưa tên lửa · <b>Varunastra</b> sóng thần · <b>Vayavyastra</b> gió thần · <b>Brahmastra</b> thần tiễn tối thượng — mở dần theo cốt truyện.</li>
+              <li>3 sao: giữ trọn sinh lực · 2 sao: còn từ một nửa · 1 sao: thắng sít sao.</li>
+              <li>Độ khó <b>Khó</b>: quỷ nhanh hơn 20%, spawn dồn dập hơn, Rama chỉ có 3 sinh lực — đổi lại điểm và xu cao hơn.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="info xlink">
+        <h2 data-i18n-html="xlink_title_html">Vũ trụ game <span class="accent">Ramayana</span></h2>
+        <p data-i18n="xlink_p">Tiếp tục hành trình cùng đại quân vanara: ném đá xây cây cầu huyền thoại vượt biển sang Lanka.</p>
+        <a class="btn" id="ramsetuLink" href="https://tranthanhhai1997.github.io/ram-setu/" target="_blank" rel="noopener" data-i18n="xlink_btn">🌉 Chơi “Xây Cầu Ram Setu”</a>
+      </section>
+
+      <footer data-i18n="footer">
+        Prototype “Bắn Cung Diệt Quỷ” — thuộc vũ trụ game Ramayana cùng “Xây Cầu Ram Setu” và “Hanuman Bay Qua Biển”, hướng tới sóng phim Ramayana ra rạp tháng 11/2026. Mọi quảng cáo trong trang là mô phỏng để minh họa vị trí đặt quảng cáo; chưa gắn mạng quảng cáo thật.
+      </footer>
+    </div>
+
+    <!-- ======= INTERSTITIAL AD (mô phỏng) ======= -->
+    <div class="admodal" id="interstitialModal" hidden>
+      <div class="adbox" role="dialog" aria-modal="true" aria-label="Quảng cáo interstitial mô phỏng">
+        <div class="adhead"><b><span data-i18n="ad_inter_head">📺 Quảng cáo</span> <span class="adtag" data-i18n="ad_inter_tag">Interstitial · mô phỏng</span></b>
+          <button class="adclose" id="interClose" type="button" disabled>Đóng sau 5s</button></div>
+        <div class="adscreen">
+          <div class="spin">🛵</div>
+          <h4 data-i18n="ad_inter_h">Giao đồ ăn siêu tốc — Giảm 40% đơn đầu</h4>
+          <p data-i18n="ad_inter_p">Quảng cáo toàn màn hình xuất hiện ở điểm ngắt tự nhiên (vừa thắng màn). Người chơi xem vài giây rồi quay lại game.</p>
+        </div>
+        <div class="adprogress"><i id="interBar"></i></div>
+        <div class="adfoot"><span data-i18n="ad_src">Nguồn: mạng quảng cáo (mô phỏng)</span><span data-i18n="ad_inter_note">eCPM interstitial thường cao gấp 5–10 lần banner</span></div>
+      </div>
+    </div>
+
+    <!-- ======= REWARDED AD (mô phỏng) ======= -->
+    <div class="admodal" id="rewardedModal" hidden>
+      <div class="adbox" role="dialog" aria-modal="true" aria-label="Quảng cáo rewarded mô phỏng">
+        <div class="adhead"><b><span data-i18n="ad_reward_head">🎁 Quảng cáo có thưởng</span> <span class="adtag" data-i18n="ad_reward_tag">Rewarded · mô phỏng</span></b>
+          <button class="adclose" id="rewardClose" type="button" disabled>Đang phát…</button></div>
+        <div class="adscreen">
+          <div class="spin">📱</div>
+          <h4 data-i18n="ad_reward_h">Ứng dụng học tiếng Anh — dùng thử 7 ngày</h4>
+          <p id="rewardText" data-i18n="ad_reward_p">Xem hết quảng cáo để nhận thưởng.</p>
+        </div>
+        <div class="adprogress"><i id="rewardBar"></i></div>
+        <div class="adfoot"><span data-i18n="ad_src">Nguồn: mạng quảng cáo (mô phỏng)</span><span id="rewardFoot">Phần thưởng sẽ trao khi xem đủ thời lượng</span></div>
+      </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/save.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/meta.js"></script>
+  </body>
+</html>

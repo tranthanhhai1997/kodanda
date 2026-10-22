@@ -1,0 +1,5 @@
+# Cấu hình máy cục bộ
+.claude/
+# Ảnh gốc độ phân giải cao (game chỉ dùng bản .webp đã nén)
+img/ramayana_sprite_pack/
+img/**/*.png
