@@ -1,6 +1,20 @@
 # Bắn Cung Diệt Quỷ
 
-Game trình duyệt bắn cung theo sử thi Ramayana, cùng vũ trụ với *Xây Cầu Ram Setu*. Không cần build — chạy bằng server tĩnh bất kỳ.
+### ▶ [Chơi ngay: tranthanhhai1997.github.io/kodanda](https://tranthanhhai1997.github.io/kodanda/)
+
+[![Bắn Cung Diệt Quỷ — chơi ngay](img/ui/og-kodanda.jpg)](https://tranthanhhai1997.github.io/kodanda/)
+
+Game trình duyệt bắn cung theo sử thi Ramayana — cùng Rama và cây cung thần Kodanda diệt quỷ Rakshasa. Chạy trên máy tính và điện thoại, cài được như ứng dụng (PWA), chơi offline, hỗ trợ Tiếng Việt / English / हिन्दी. Cùng vũ trụ với [Xây Cầu Ram Setu](https://tranthanhhai1997.github.io/ram-setu/).
+
+- **15 màn cốt truyện** qua 3 chương, hội thoại cùng Rama, Lakshmana, Sita, Hanuman, Vibhishana, Ravana…
+- **4 boss**: Tataka ném đá tảng · nai vàng Maricha phân thân ảo ảnh · Kumbhakarna dậm đất · Ravana mười đầu mọc lại
+- **4 thần tiễn** (Agneyastra, Varunastra, Vayavyastra, Brahmastra), phát bắn hoàn hảo & chí mạng
+- **Vô tận**, **Thử thách ngày**, cửa hàng nâng cấp cung / trang phục / Lakshmana trợ chiến, 17 thành tựu, 9 thẻ nhân vật
+- **Điều khiển:** kéo / chạm giữ để ngắm và dồn lực, thả để bắn · bàn phím: `↑` `↓` chỉnh góc, giữ `Space` dồn lực, `1`–`4` thần tiễn, `P` tạm dừng
+
+## Chạy trên máy
+
+Không cần build — chạy bằng server tĩnh bất kỳ:
 
 ```bash
 python3 -m http.server 8766
