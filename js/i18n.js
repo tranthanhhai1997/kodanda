@@ -111,7 +111,7 @@ var STR = {
     shop_title:'🛒 Shop', tab_up:'Bow upgrades', tab_outfit:'Outfits', tab_trail:'Arrow trails', back:'← Back',
     journey_title:'🏆 Rama’s Journey', tab_ach:'Achievements', tab_cards:'Character cards',
     daily_title:'🎁 Daily gift', daily_claim:'🎁 Claim {n} coins', daily_claimed:'✔ Claimed today', daily_double:'📺 Watch ad — double', close:'Close',
-    daily_streak:'Login streak: {n} days', daily_tomorrow:' · See you tomorrow!', day:'Day {n}',
+    daily_streak:'Login streak: {n} day(s)', daily_tomorrow:' · See you tomorrow!', day:'Day {n}',
     rotate_hint:'📱 Rotate to landscape and tap ⛶ for full screen',
     pause_title:'⏸ Paused', pause_text:'Rama holds his breath, awaiting your command.', resume:'▶ Resume',
     banner_tag:'Ad · Banner 728×90', banner_text:'🏹 Great games every day at GameVui Hub', banner_small:'Free to play — no install · Banner slot below the game, shown during the session',

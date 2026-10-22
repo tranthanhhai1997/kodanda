@@ -1,6 +1,6 @@
 /* Service worker — cho phép cài đặt và chơi offline.
    Tăng VERSION mỗi lần phát hành để người chơi nhận bản mới. */
-var VERSION = 'kodanda-v1';
+var VERSION = 'kodanda-v2';
 var FONT_CACHE = 'kodanda-fonts';
 var SHELL = ['./', 'index.html', 'manifest.webmanifest', 'css/style.css', 'js/data.js', 'js/save.js', 'js/i18n.js', 'js/audio.js', 'js/game.js', 'js/ui.js', 'js/meta.js', 'icons/apple-touch-icon.png', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'img/bg/dawn.webp', 'img/bg/day.webp', 'img/bg/dusk.webp', 'img/bg/lanka.webp', 'img/bg/night.webp', 'img/bg/storm.webp', 'img/bg/sunset.webp', 'img/portraits/hanuman.webp', 'img/portraits/jambavan.webp', 'img/portraits/kumbhakarna.webp', 'img/portraits/lakshmana.webp', 'img/portraits/narrator.webp', 'img/portraits/rama.webp', 'img/portraits/ravana.webp', 'img/portraits/sita.webp', 'img/portraits/sugriva.webp', 'img/portraits/vibhishana.webp', 'img/sprites/boss_maricha.webp', 'img/sprites/boss_ravana.webp', 'img/sprites/boss_tataka.webp', 'img/sprites/demon_fast.webp', 'img/sprites/demon_fly.webp', 'img/sprites/demon_shaman.webp', 'img/sprites/demon_shield.webp', 'img/sprites/demon_splitter.webp', 'img/sprites/rama_draw.webp', 'img/sprites/rama_idle.webp', 'img/sprites/rama_release.webp', 'img/ui/emblem.webp', 'img/ui/fireball.webp', 'img/ui/keyart.webp', 'img/ui/rakshasa-boss.webp', 'img/ui/rakshasa.webp'];
 
