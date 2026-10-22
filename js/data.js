@@ -190,7 +190,7 @@ var DAILY_WIN_REWARD = 200;
    bg.<sky>: ảnh nền 960×540 thay cho nền vẽ bằng code
    ============================================================ */
 var ART = {
-  keyart: 'img/ui/keyart.webp',
+  cover: 'img/ui/cover.webp',
   emblem: 'img/ui/emblem.webp',
   fireball: 'img/ui/fireball.webp',
   // Rama: grip = vị trí tay cầm cung (tỉ lệ theo ảnh), foot = tâm bàn chân theo chiều ngang
@@ -198,18 +198,19 @@ var ART = {
                  draw:  { src:'img/sprites/rama_draw.webp',    foot:.42, grip:[.88, .29] },
                  release:{ src:'img/sprites/rama_release.webp', foot:.45 } },
   // k: chiều cao vẽ = r × k · flip: ảnh gốc quay mặt sang phải · center: neo giữa (quỷ bay)
+  // tints: biến thể màu (bộ lọc CSS) chọn ngẫu nhiên cho từng con · srcs: nhiều ảnh khác nhau, chọn ngẫu nhiên
   demons: {
-    ground:   { src:'img/ui/rakshasa.webp',            k:2.9, flip:true },
-    armor:    { src:'img/ui/rakshasa-boss.webp',       k:3.0, flip:true },
-    fast:     { src:'img/sprites/demon_fast.webp',     k:3.2 },
-    fly:      { src:'img/sprites/demon_fly.webp',      k:4.2, center:true },
+    ground:   { src:'img/ui/rakshasa.webp',            k:2.9, tints:[null, 'hue-rotate(110deg) saturate(1.2)', 'hue-rotate(-70deg) saturate(1.3)', 'hue-rotate(200deg)', 'hue-rotate(55deg) brightness(1.1)'] },
+    armor:    { src:'img/ui/rakshasa-boss.webp',       k:3.0, tints:[null, 'hue-rotate(160deg)', 'hue-rotate(-40deg) saturate(1.3)'] },
+    fast:     { src:'img/sprites/demon_fast.webp',     k:3.2, tints:[null, 'hue-rotate(-30deg)', 'hue-rotate(250deg) saturate(1.2)'] },
+    fly:      { src:'img/sprites/demon_fly.webp',      k:4.2, center:true, tints:[null, 'hue-rotate(160deg)', 'hue-rotate(-90deg)'] },
     shield:   { src:'img/sprites/demon_shield.webp',   k:3.3 },
     splitter: { src:'img/sprites/demon_splitter.webp', k:3.3 },
     shaman:   { src:'img/sprites/demon_shaman.webp',   k:3.6 },
     tataka:   { src:'img/sprites/boss_tataka.webp',    k:3.7 },
     maricha:  { src:'img/sprites/boss_maricha.webp',   k:3.9 },
     decoy:    { src:'img/sprites/boss_maricha.webp',   k:3.9 },
-    kumbha:   { src:'img/ui/rakshasa-boss.webp',       k:3.0, flip:true }
+    kumbha:   { src:'img/ui/rakshasa-boss.webp',       k:3.0, tints:['hue-rotate(230deg) saturate(.8) brightness(.9)'] }
   },
   // Ravana: heads = tâm từng đầu (tỉ lệ theo ảnh), hr = bán kính đầu, chest = điểm yếu
   ravana: { src:'img/sprites/boss_ravana.webp', h:300, hr:.05, chest:[.5, .36],

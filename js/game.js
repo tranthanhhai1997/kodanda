@@ -50,9 +50,10 @@ function addCoins(n){
   var c = el('coinChip'); c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump');
 }
 function addEnergy(n){ G.energy = Math.min(100, G.energy + n); }
-function sprOf(dm){ var s = ART.demons[dm.id || dm.type]; return s && getImg(s.src) ? s : null; }
-function bodyY(dm){ var s = sprOf(dm); return dm.ground ? dm.y - (s ? dm.r * s.k * .5 : dm.r) : dm.y; }   // tâm thân để tính va chạm
-function hitR(dm){ var s = sprOf(dm); return s ? dm.r * s.k * .36 : dm.r; }
+function sprSrc(dm, s){ return dm.src || s.src || (s.srcs && s.srcs[0]); }
+function sprOf(dm){ var s = ART.demons[dm.id || dm.type]; return s && getImg(sprSrc(dm, s)) ? s : null; }
+function bodyY(dm){ var s = sprOf(dm); return dm.ground ? dm.y - (s ? dm.r * s.k * (dm.scale || 1) * .5 : dm.r) : dm.y; }   // tâm thân để tính va chạm
+function hitR(dm){ var s = sprOf(dm); return s ? dm.r * s.k * (dm.scale || 1) * .36 : dm.r; }
 
 /* ---------------- spawning ---------------- */
 function pickType(mix){
@@ -71,6 +72,10 @@ function makeDemon(type, x, y){
   else if(type === 'shaman'){ m.r = 24; m.hp = 2; m.spd = sp * 0.75; m.coin = 14; m.stopX = rand(640, 780); m.healT = 2.5; m.healFx = 0; }
   else { m.type = 'ground'; m.r = 26; m.hp = 1; m.spd = sp * rand(.85,1.15); m.coin = 5; }
   m.maxHp = m.hp;
+  var A = ART.demons[m.type];
+  if(A && A.tints) m.tint = A.tints[Math.floor(Math.random() * A.tints.length)];   // biến thể màu
+  if(A && A.srcs) m.src = A.srcs[Math.floor(Math.random() * A.srcs.length)];      // biến thể ảnh
+  m.scale = rand(.92, 1.1);
   return m;
 }
 function spawnDemon(type){ G.demons.push(makeDemon(type, W + 50)); }
@@ -94,6 +99,7 @@ function spawnBoss(id){
     boss.maxHp = hh * boss.heads.length; boss.hp = boss.maxHp;
     boss.core = boss.coreMax = Math.round(B.core * d.bossHp); boss.exposed = 0;
   }
+  var BA = ART.demons[id]; if(BA && BA.tints) boss.tint = BA.tints[0];
   G.bossRef = boss; G.bossSpawned = true;
   G.demons.push(boss);
   toast(B.intro);
@@ -900,10 +906,10 @@ function hpBar(x, y, w, frac){
 var SKINS = { ground:'#7d8a4a', fly:'#4f7a52', fast:'#b0563a', armor:'#8a5a48', shield:'#6f7d58', splitter:'#9a4d8c', shaman:'#3f7a74',
               tataka:'#6b4a3a', kumbha:'#5b4a6a', ravana:'#7a4fa3' };
 function drawDemon(dm, t){
-  if(dm.id === 'maricha' || dm.type === 'decoy'){ var ds = sprOf(dm); if(ds) drawSprite(dm, ds, getImg(ds.src), t); else drawDeer(dm, t); return; }
+  if(dm.id === 'maricha' || dm.type === 'decoy'){ var ds = sprOf(dm); if(ds) drawSprite(dm, ds, getImg(sprSrc(dm, ds)), t); else drawDeer(dm, t); return; }
   if(dm.id === 'ravana'){ drawRavana(dm, t); return; }
-  var spr = ART.demons[dm.id || dm.type], sim = spr && getImg(spr.src);
-  if(sim){ drawSprite(dm, spr, sim, t); return; }
+  var spr = sprOf(dm), sim = spr && getImg(sprSrc(dm, spr));
+  if(sim){ drawSprite(dm, spr, getImg(sprSrc(dm, spr)), t); return; }
   var groundType = dm.ground;
   var cy = bodyY(dm);
   var flash = dm.hitFlash > 0;
@@ -997,14 +1003,14 @@ function drawDemon(dm, t){
 
 /* quỷ dùng ảnh minh họa: neo chân giữa đáy ảnh, lắc nhẹ khi bước */
 function drawSprite(dm, spr, im, t){
-  var h = dm.r * spr.k, w = h * im.naturalWidth / im.naturalHeight;
+  var h = dm.r * spr.k * (dm.scale || 1), w = h * im.naturalWidth / im.naturalHeight;
   ctx.save();
   if(dm.type === 'decoy') ctx.globalAlpha = Math.sin(t * 2.2 + dm.phase) > .82 ? .3 : .95;   // ảo ảnh nhấp nháy
   ctx.translate(dm.x, spr.center ? dm.y + h / 2 : dm.y + 2);
   if(!spr.center) ctx.rotate(Math.sin(dm.t * 8) * .05);
   else ctx.translate(0, Math.sin(dm.t * 6) * 3);
   if(!!spr.flip !== (dm.face > 0)) ctx.scale(-1, 1);   // ảnh quay trái; Maricha chạy sang phải thì lật
-  ctx.drawImage(dm.hitFlash > 0 ? whiteOf(im) : im, -w / 2, -h - (spr.center ? 0 : Math.abs(Math.sin(dm.t * 8)) * 3), w, h);
+  ctx.drawImage(dm.hitFlash > 0 ? whiteOf(im) : tinted(im, dm.tint), -w / 2, -h - (spr.center ? 0 : Math.abs(Math.sin(dm.t * 8)) * 3), w, h);
   ctx.restore();
   if(dm.type === 'shaman' && dm.healFx > 0){ ctx.globalAlpha = dm.healFx; ctx.fillStyle = '#7be3a0'; ctx.beginPath(); ctx.arc(dm.x, dm.y - h, 8, 0, 7); ctx.fill(); ctx.globalAlpha = 1; }
   if(dm.maxHp > 1 && dm.type !== 'boss') hpBar(dm.x, (spr.center ? dm.y - h / 2 : dm.y - h) - 12, 56, dm.hp / dm.maxHp);
@@ -1213,7 +1219,7 @@ function draw(){
 }
 
 /* tải trước ảnh minh họa */
-for(var ak in ART.demons) getImg(ART.demons[ak].src);
+for(var ak in ART.demons) (ART.demons[ak].srcs || [ART.demons[ak].src]).forEach(getImg);
 ['idle', 'draw', 'release'].forEach(function(p){ ramaImg(p); });
 if(ART.ravana) getImg(ART.ravana.src);
 for(var bk in ART.bg) getImg(ART.bg[bk]);
