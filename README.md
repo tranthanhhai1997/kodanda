@@ -49,7 +49,7 @@ Chỉ cần sửa `js/data.js`:
 
 ## Trước khi phát hành
 
-- `SHARE.url` trong `js/data.js`: điền URL chính thức của game (đang để trống = dùng địa chỉ trang hiện tại).
+- Đã phát hành: https://tranthanhhai1997.github.io/kodanda/ (`SHARE.url` trong `js/data.js`).
 - Chưa có URL của “Hanuman Bay Qua Biển” nên mới liên kết chéo sang RamSetu.
 
 ## Đa ngôn ngữ

@@ -125,7 +125,7 @@ var SKIES = {
 /* ============================================================
    META — cửa hàng, quà ngày, thành tựu, chế độ chơi
    ============================================================ */
-var SHARE = { url:'', hashtag:'#KodandaChallenge', ramsetu:'https://tranthanhhai1997.github.io/ram-setu/' };   // url rỗng = dùng địa chỉ trang hiện tại
+var SHARE = { url:'https://tranthanhhai1997.github.io/kodanda/', hashtag:'#KodandaChallenge', ramsetu:'https://tranthanhhai1997.github.io/ram-setu/' };   // url rỗng = dùng địa chỉ trang hiện tại
 
 /* Nâng cấp cung — prices[i]: giá lên cấp i+1 */
 var UPGRADES = [
