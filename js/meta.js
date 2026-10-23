@@ -194,9 +194,11 @@ function showDailyWin(){
 }
 
 /* ---------------- chia sẻ ---------------- */
-function shareUrl(){ return SHARE.url || location.href.split('#')[0]; }
+function shareUrl(){ return SHARE.url || (IS_APP ? '' : location.href.split('#')[0]); }
 function shareText(text){
   var full = text + ' ' + SHARE.hashtag;
+  var nat = Native.share({ title: t('share_title'), text: full, url: shareUrl() });
+  if(nat){ nat.catch(function(){}); return; }
   if(navigator.share){ navigator.share({ title: t('share_title'), text: full, url: shareUrl() }).catch(function(){}); return; }
   if(navigator.clipboard){ navigator.clipboard.writeText(full + ' ' + shareUrl()).then(function(){ toast(t('t_copied')); }, function(){ toast(full); }); }
   else toast(full);
@@ -210,7 +212,7 @@ function resultText(){
 function shareImage(){
   var c = document.createElement('canvas'); c.width = 1200; c.height = 630;
   var x = c.getContext('2d');
-  x.drawImage(canvas, 0, 0, W, H, 0, -22, 1200, 675);
+  x.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, -22, 1200, 675);
   var g = x.createLinearGradient(0, 0, 0, 630); g.addColorStop(0, 'rgba(8,10,24,.25)'); g.addColorStop(1, 'rgba(8,10,24,.9)');
   x.fillStyle = g; x.fillRect(0, 0, 1200, 630);
   var em = getImg(ART.emblem); if(em) x.drawImage(em, 40, 40, 120, 120);
@@ -276,6 +278,20 @@ if(S.daily.lastClaim !== todayStr()) setTimeout(function(){ if(state === 'menu')
   sel.addEventListener('change', function(){ S.lang = sel.value; saveGame(); location.reload(); });
 })();
 
+/* ---------------- quyền riêng tư & quảng cáo ---------------- */
+el('privacyBtn').addEventListener('click', function(){ if(IS_APP) location.href = PRIVACY_URL; else window.open(PRIVACY_URL, '_blank', 'noopener'); });
+el('adPrivacyBtn').addEventListener('click', function(){ Ads.showPrivacyOptions(); });
+ADS_READY.then(function(){ el('adPrivacyBtn').hidden = !Ads.privacyRequired(); });
+
+/* ---------------- app Android: nút Back = tạm dừng / quay lại / thoát ---------------- */
+Native.on('App', 'backButton', function(){
+  if(state === 'playing'){ setPaused(true); return; }
+  if(state === 'paused'){ setPaused(false); return; }
+  if(state === 'story'){ storyNext(true); return; }
+  if(el('menuOverlay').hidden){ toMenu(); return; }
+  Native.exitApp();
+});
+
 /* ---------------- PWA: cài lên màn hình chính, chơi offline ---------------- */
 var installEvt = null;
 window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); installEvt = e; el('installBtn').hidden = false; });
@@ -287,6 +303,7 @@ el('installBtn').addEventListener('click', function(){
 (function(){
   var standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
   var ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if(IS_APP) return;   // app native: không cần cài PWA / service worker
   if(ios && !standalone) el('installBtn').hidden = false;   // iOS không có sự kiện cài đặt: bấm để xem hướng dẫn
   if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) navigator.serviceWorker.register('sw.js').catch(function(){});
 })();

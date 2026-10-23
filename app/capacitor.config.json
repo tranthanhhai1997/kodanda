@@ -1,0 +1,7 @@
+{
+  "appId": "io.github.tranthanhhai1997.kodanda",
+  "appName": "Kodanda: Demon Slayer Archer",
+  "webDir": "www",
+  "backgroundColor": "#0d1220",
+  "android": { "backgroundColor": "#0d1220" }
+}

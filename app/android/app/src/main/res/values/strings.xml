@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Kodanda: Demon Slayer Archer</string>
+    <string name="title_activity_main">Kodanda: Demon Slayer Archer</string>
+    <string name="package_name">io.github.tranthanhhai1997.kodanda</string>
+    <string name="custom_url_scheme">io.github.tranthanhhai1997.kodanda</string>
+    <!-- AdMob App ID của Kodanda -->
+    <string name="admob_app_id">ca-app-pub-6386233826905968~9392763455</string>
+</resources>

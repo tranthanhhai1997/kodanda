@@ -5,7 +5,7 @@
 var SAVE_KEY = 'kodanda_save_v1';
 function defaultSave(){
   return {
-    v: 1, lang: '', coins: 0, unlocked: 1, stars: {}, seen: {}, diff: 'normal', sound: true, totalScore: 0,
+    v: 1, lang: '', coins: 0, unlocked: 1, stars: {}, seen: {}, diff: 'normal', sound: true, music: true, haptic: true, totalScore: 0,
     upgrades: {}, outfit: 'saffron', trail: 'none', owned: ['saffron', 'none'],
     daily: { lastClaim: null, streak: 0, challengeDone: null, doubled: null },
     ach: {}, cards: [], endlessBest: 0, endlessScore: 0,

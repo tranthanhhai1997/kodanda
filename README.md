@@ -22,27 +22,35 @@ python3 -m http.server 8766
 
 Mở `http://localhost:8766/`. File gốc được giữ nguyên: `Game Bắn Cung Diệt Quỷ.html`. Kế hoạch nâng cấp: `PLAN.md`.
 
+> **Tiếp tục dự án trên máy khác:** đọc [`NOTES.md`](NOTES.md) (trạng thái, ID AdMob, cách build app Android, việc tiếp theo).
+
 ## Cấu trúc
 
 | File | Nội dung |
 |---|---|
-| `index.html` | Bố cục trang, các lớp phủ (menu, thắng/thua, tạm dừng, quảng cáo mô phỏng) |
+| `index.html` | Bố cục trang, các lớp phủ (menu, thắng/thua, tạm dừng, quảng cáo) |
 | `css/style.css` | Giao diện |
 | `js/data.js` | **Toàn bộ nội dung & cân bằng**: độ khó, nhân vật hội thoại, 3 chương, 15 màn + cốt truyện, 4 boss, 4 thần tiễn (Astra), bầu trời |
 | `js/i18n.js` | Đa ngôn ngữ vi / en / hi: chuỗi giao diện (`STR`) + bản dịch nội dung (`CONTENT`) |
 | `js/save.js` | Lưu tiến trình (localStorage, khóa `kodanda_save_v1`): xu, màn đã mở, sao, hội thoại đã xem, độ khó, âm thanh, thống kê |
-| `js/audio.js` | Âm thanh tổng hợp bằng WebAudio |
+| `js/platform.js` | Web hay app native (Capacitor): rung, chia sẻ, nút Back, **AdMob** (interstitial + rewarded, đồng ý GDPR) |
+| `js/audio.js` | Âm thanh tổng hợp bằng WebAudio (vang, chuông, gảy dây, tabla) + nhạc nền tanpura |
 | `js/game.js` | Engine: sinh quỷ, AI boss, thần tiễn, bắn tên (hoàn hảo / chí mạng), va chạm, vẽ canvas, điều khiển |
-| `js/ui.js` | HUD, thanh Astra, hội thoại, menu theo chương, luồng màn, quảng cáo mô phỏng |
+| `js/ui.js` | HUD, thanh Astra, hội thoại, menu theo chương, luồng màn, quảng cáo (AdMob trong app, quảng cáo chéo Ram Setu trên web) |
 | `js/meta.js` | Cửa hàng, quà ngày, thành tựu, thẻ nhân vật, Vô tận, Thử thách ngày, chia sẻ, toàn màn hình |
 | `img/portraits/`, `img/ui/` | Ảnh tái dùng từ RamSetu: chân dung (hội thoại, thẻ), quỷ, cầu lửa, ảnh chủ đạo, huy hiệu |
 | `img/sprites/`, `img/bg/` | Ảnh Rama, quỷ, boss, 7 nền (WebP, chuyển từ `img/ramayana_sprite_pack/` — PNG gốc không đưa lên máy chủ) |
 | `manifest.webmanifest`, `sw.js`, `icons/` | PWA: cài lên màn hình chính, chơi offline |
 | `docs/art-prompts.md` | Prompt tạo ảnh (dùng khi cần thêm ảnh mới) |
+| `app/` | Bản app Android (Capacitor 8): project Android, script build APK/AAB, icon & splash |
+| `css/fonts.css`, `fonts/` | Font lưu kèm game (chạy offline, dùng trong app) |
+| `privacy.html` | Chính sách bảo mật (bắt buộc cho AdMob / Google Play) |
+| `docs/playtest-bot.js` | Bot chơi thử tự động 15 màn + Vô tận + Thử thách ngày |
 | `docs/monetization.md` | Mô hình doanh thu quảng cáo (nội bộ, không hiển thị cho người chơi) |
 
-## Quảng cáo (mô phỏng)
+## Quảng cáo
 
+- App Android: AdMob thật (`js/platform.js`); web: quảng cáo chéo sang Ram Setu. ID & lưu ý: `NOTES.md`.
 - Interstitial: mỗi 2 màn thắng, không hiện ở màn 1–2 (`winsSinceAd` trong `js/ui.js`).
 - Rewarded: +30 xu, nhân đôi xu khi thắng, hồi sinh (tối đa 1 lần mỗi lượt chơi màn).
 

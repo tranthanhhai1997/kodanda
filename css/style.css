@@ -260,7 +260,7 @@ body{
 .panel h2,.panel h3{text-shadow:0 2px 12px rgba(245,185,66,.25)}
 .panel.wide{max-width:640px}
 #menuOverlay{background:linear-gradient(180deg,rgba(5,8,18,.45),rgba(5,8,18,.85)),url(../img/ui/cover.webp) center/cover}
-.menu-panel{background:linear-gradient(180deg,rgba(24,34,56,.9),rgba(30,42,71,.94));backdrop-filter:blur(4px)}
+.menu-panel{--ink:#eef1fa;--muted:#a7b0c9;--line:#2c3a5e;color:var(--ink);background:linear-gradient(180deg,rgba(24,34,56,.9),rgba(30,42,71,.94));backdrop-filter:blur(4px)}
 .menu-emblem{display:block;margin:-6px auto 0;width:84px;height:84px;object-fit:contain;filter:drop-shadow(0 4px 14px rgba(245,185,66,.5))}
 .metarow{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:12px}
 .mbtn{
@@ -339,3 +339,25 @@ body{font-family:"Be Vietnam Pro","Noto Sans Devanagari",system-ui,-apple-system
   background:var(--bg2);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:6px 8px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;
 }
 .panel p.winlvl{margin:0 0 6px;font-weight:700;color:var(--gold2)}
+
+/* ---------- nhạc, liên kết pháp lý ---------- */
+.iconbtn.off{opacity:.45;text-decoration:line-through}
+.legal{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;margin-top:10px}
+.legal button{border:0;background:none;color:var(--muted);font:inherit;font-size:12px;cursor:pointer;text-decoration:underline;padding:2px}
+.adscreen .btn{display:inline-block;margin-top:8px;text-decoration:none}
+
+/* ---------- app Android/iOS (Capacitor): toàn màn hình, không có phần trang web ---------- */
+body.app{--bg:#0d1220;--bg2:#131a2e;--panel:#182238;--panel2:#1e2a47;--line:#2c3a5e;--ink:#eef1fa;--muted:#a7b0c9;color:var(--ink);overflow:hidden;overscroll-behavior:none;background:#000}
+body.app .wrap{padding:0;max-width:none}
+body.app .ad-banner, body.app .info, body.app footer, body.app #fsBtn, body.app #hudFsBtn, body.app #installBtn, body.app .rotate-hint{display:none !important}
+body.app .stage{position:fixed;inset:0;z-index:50;border-radius:0;border:0;aspect-ratio:auto;background:#000;box-shadow:none}
+body.app canvas#game{inset:0;margin:auto;width:min(100vw,177.78vh);height:min(100vh,56.25vw)}
+body.app .toolbar{position:fixed;top:0;left:0;right:0;z-index:60;border-radius:0;margin:0;padding:6px 10px calc(6px) max(10px,env(safe-area-inset-left));background:rgba(13,18,32,.88);backdrop-filter:blur(6px)}
+body.app .toolbar{flex-wrap:nowrap}
+body.app .brand > span{display:none}
+body.app .brand .bow-ic{width:32px;height:32px}
+body.app .tools{flex-wrap:nowrap;gap:6px}
+body.app .iconbtn{width:34px;height:34px}
+body.app.in-game .toolbar{display:none}
+body.app #menuOverlay{padding-top:56px}
+body.app .overlay{overflow-y:auto}

@@ -6,9 +6,7 @@
     <meta name="color-scheme" content="dark light" />
     <link rel="icon" href="icons/icon-192.png" type="image/png" />
     <title>Game Bắn Cung Diệt Quỷ</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800;900&family=Playfair+Display:wght@700;800&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/fonts.css" />
     <meta name="theme-color" content="#0d1220" />
     <meta name="description" content="Game bắn cung theo sử thi Ramayana: cùng Rama và cây cung thần Kodanda diệt quỷ Rakshasa qua 15 màn, 4 boss, chế độ Vô tận và Thử thách ngày." />
     <link rel="manifest" href="manifest.webmanifest" />
@@ -37,6 +35,7 @@
           </div>
           <span class="chip" id="coinChip" data-i18n-title="coin_t">🪙 <span class="coin" id="coinCount">0</span> <span data-i18n="coin_unit">xu</span></span>
           <button class="iconbtn" id="soundBtn" type="button" data-i18n-title="sound_t">🔊</button>
+          <button class="iconbtn" id="musicBtn" type="button" data-i18n-title="music_t">🎵</button>
           <button class="iconbtn" id="rewardMenuBtn" type="button" data-i18n-title="ad_coin_t">📺</button>
           <button class="iconbtn" id="installBtn" type="button" data-i18n-title="install" hidden>📲</button>
           <button class="iconbtn" id="fsBtn" type="button" data-i18n-title="fs_t">⛶</button>
@@ -100,6 +99,10 @@
               <button class="mbtn" id="endlessBtn" type="button" data-i18n="m_endless">♾️ Vô tận</button>
               <button class="mbtn" id="dailyBtn" type="button">⚔️ Thử thách ngày</button>
               <button class="mbtn" id="shareBtn" type="button" data-i18n="m_share">📤 Chia sẻ</button>
+            </div>
+            <div class="legal">
+              <button type="button" id="privacyBtn" data-i18n="privacy">🔒 Chính sách bảo mật</button>
+              <button type="button" id="adPrivacyBtn" data-i18n="ad_privacy" hidden>⚙️ Tùy chọn quảng cáo</button>
             </div>
           </div>
         </div>
@@ -201,7 +204,7 @@
       </div>
 
       <!-- ======= BANNER AD (mô phỏng) ======= -->
-      <div class="ad-banner" role="complementary" aria-label="Quảng cáo banner mô phỏng">
+      <div class="ad-banner" role="complementary">
         <div class="fake"><span class="adtag" data-i18n="banner_tag">Quảng cáo · Banner 728×90</span><br /><span data-i18n="banner_text">🏹 Game hay mỗi ngày tại GameVui Hub</span> <small data-i18n="banner_small">Chơi miễn phí — không cần cài đặt · Vị trí banner dưới khung game, hiển thị suốt phiên chơi</small></div>
         <button class="cta" type="button" id="bannerCta" data-i18n="banner_cta">Chơi ngay</button>
       </div>
@@ -255,13 +258,14 @@
 
     <!-- ======= INTERSTITIAL AD (mô phỏng) ======= -->
     <div class="admodal" id="interstitialModal" hidden>
-      <div class="adbox" role="dialog" aria-modal="true" aria-label="Quảng cáo interstitial mô phỏng">
+      <div class="adbox" role="dialog" aria-modal="true" aria-label="Ram Setu">
         <div class="adhead"><b><span data-i18n="ad_inter_head">📺 Quảng cáo</span> <span class="adtag" data-i18n="ad_inter_tag">Interstitial · mô phỏng</span></b>
           <button class="adclose" id="interClose" type="button" disabled>Đóng sau 5s</button></div>
         <div class="adscreen">
-          <div class="spin">🛵</div>
+          <div class="spin">🌉</div>
           <h4 data-i18n="ad_inter_h">Giao đồ ăn siêu tốc — Giảm 40% đơn đầu</h4>
-          <p data-i18n="ad_inter_p">Quảng cáo toàn màn hình xuất hiện ở điểm ngắt tự nhiên (vừa thắng màn). Người chơi xem vài giây rồi quay lại game.</p>
+          <p data-i18n="ad_inter_p"></p>
+          <a class="btn sm" href="https://tranthanhhai1997.github.io/ram-setu/" target="_blank" rel="noopener" data-i18n="banner_cta">Chơi ngay</a>
         </div>
         <div class="adprogress"><i id="interBar"></i></div>
         <div class="adfoot"><span data-i18n="ad_src">Nguồn: mạng quảng cáo (mô phỏng)</span><span data-i18n="ad_inter_note">eCPM interstitial thường cao gấp 5–10 lần banner</span></div>
@@ -270,11 +274,11 @@
 
     <!-- ======= REWARDED AD (mô phỏng) ======= -->
     <div class="admodal" id="rewardedModal" hidden>
-      <div class="adbox" role="dialog" aria-modal="true" aria-label="Quảng cáo rewarded mô phỏng">
+      <div class="adbox" role="dialog" aria-modal="true" aria-label="Ram Setu">
         <div class="adhead"><b><span data-i18n="ad_reward_head">🎁 Quảng cáo có thưởng</span> <span class="adtag" data-i18n="ad_reward_tag">Rewarded · mô phỏng</span></b>
           <button class="adclose" id="rewardClose" type="button" disabled>Đang phát…</button></div>
         <div class="adscreen">
-          <div class="spin">📱</div>
+          <div class="spin">🌉</div>
           <h4 data-i18n="ad_reward_h">Ứng dụng học tiếng Anh — dùng thử 7 ngày</h4>
           <p id="rewardText" data-i18n="ad_reward_p">Xem hết quảng cáo để nhận thưởng.</p>
         </div>
@@ -286,6 +290,7 @@
     <script src="js/data.js"></script>
     <script src="js/save.js"></script>
     <script src="js/i18n.js"></script>
+    <script src="js/platform.js"></script>
     <script src="js/audio.js"></script>
     <script src="js/game.js"></script>
     <script src="js/ui.js"></script>

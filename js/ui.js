@@ -1,6 +1,6 @@
 "use strict";
 /* ============================================================
-   GIAO DIỆN — HUD, lớp phủ, luồng màn, quảng cáo mô phỏng
+   GIAO DIỆN — HUD, lớp phủ, luồng màn, quảng cáo (AdMob trong app, quảng cáo chéo trên web)
    ============================================================ */
 var winsSinceAd = 0;          // interstitial: mỗi 2 màn thắng, bỏ qua màn 1–2
 var OVERLAYS = ['menuOverlay','winOverlay','loseOverlay','pauseOverlay','storyOverlay'];
@@ -95,6 +95,7 @@ function showLose(){
   if(endless && G.score > S.endlessScore){ S.endlessScore = G.score; el('loseText').textContent = t('lose_record') + el('loseText').textContent; }
   saveGame();
   checkAchievements();
+  music.tense(false); sLose();
   showOverlay('loseOverlay');
 }
 
@@ -115,12 +116,14 @@ function beginLevel(idx){
 function beginSession(L, label, msg){
   G = newSession(L);
   state = 'playing';
-  el('hud').hidden = false;
+  el('hud').hidden = false; document.body.classList.add('in-game');
   el('hudLevel').textContent = label;
   showOverlay(null);
   buildAstraBar();
   updateHUD();
   toast(msg);
+  G.banner = { text: label, sub: L.sub, t: 0, life: 2.2 };
+  music.tense(false); sConch();
 }
 function retry(){
   if(mode === 'endless') startEndless();
@@ -128,7 +131,8 @@ function retry(){
   else startLevel(levelIdx);
 }
 function toMenu(){
-  state = 'menu'; G = null;
+  state = 'menu'; G = null; music.tense(false);
+  document.body.classList.remove('in-game');
   el('hud').hidden = true; el('astraBar').hidden = true;
   buildLevelGrid();
   if(typeof refreshBadges === 'function') refreshBadges();
@@ -144,7 +148,7 @@ var story = null;
 function showStory(lines, done){
   story = { lines: lines, i: 0, done: done, prev: state };
   state = 'story';
-  el('hud').hidden = true; el('astraBar').hidden = true;
+  el('hud').hidden = true; el('astraBar').hidden = true; document.body.classList.add('in-game');
   showOverlay('storyOverlay');
   renderStory();
 }
@@ -206,6 +210,11 @@ document.querySelectorAll('.seg button').forEach(function(b){
 });
 el('soundBtn').addEventListener('click', function(){
   soundOn = S.sound = !soundOn; saveGame(); el('soundBtn').textContent = soundOn ? '🔊' : '🔇';
+  sClick();
+});
+el('musicBtn').addEventListener('click', function(){
+  musicOn = S.music = !musicOn; saveGame(); el('musicBtn').classList.toggle('off', !musicOn);
+  music.sync();
 });
 el('playBtn').addEventListener('click', function(){ startLevel(Math.min(S.unlocked, LEVELS.length) - 1); });
 el('pauseBtn').addEventListener('click', function(){ setPaused(true); });
@@ -218,11 +227,22 @@ el('nextBtn').addEventListener('click', function(){
   if(levelIdx + 1 < LEVELS.length) startLevel(levelIdx + 1);
   else showStory(ENDING, toMenu);
 });
-el('bannerCta').addEventListener('click', function(){ toast(t('banner_toast')); });
+el('bannerCta').addEventListener('click', function(){ window.open(SHARE.ramsetu, '_blank', 'noopener'); });
 
 /* ============================================================
-   QUẢNG CÁO MÔ PHỎNG
+   QUẢNG CÁO — app: AdMob thật (platform.js) · web: quảng cáo chéo game Ram Setu
    ============================================================ */
+var realAdOn = false;         // đang hiện quảng cáo AdMob: dừng vòng lặp game & âm thanh
+function openRealAd(kind, onDone){
+  realAdOn = true;
+  if(AC) AC.suspend();
+  Ads.show(kind).then(function(ok){
+    realAdOn = false;
+    if(AC) AC.resume();
+    if(kind === 'interstitial' || ok){ if(onDone) onDone(); }
+    else toast(t('t_ad_skipped'));   // đóng rewarded sớm: không thưởng
+  });
+}
 var adTimer = null;
 function runAdTimer(barEl, btnEl, secs, doneLabel, onDone){
   var step = 0, total = secs * 10;
@@ -243,13 +263,22 @@ function runAdTimer(barEl, btnEl, secs, doneLabel, onDone){
   }, 100);
 }
 function openInterstitial(cb){
+  if(Ads.ready('interstitial')){ openRealAd('interstitial', cb); return; }
+  if(IS_APP){ if(cb) cb(); return; }   // app: chưa tải được thì bỏ qua, không bắt người chơi chờ
   var m = el('interstitialModal'); m.hidden = false;
   runAdTimer(el('interBar'), el('interClose'), 5, t('ad_close'), function(){
     m.hidden = true; el('interClose').onclick = null; if(cb) cb();
   });
   el('interClose').textContent = t('ad_close_in', { n: 5 });
 }
-function openRewarded(onReward){
+// freeIfNoAd: app không có quảng cáo (mất mạng / hết hàng) thì vẫn trao thưởng — dùng cho hồi sinh
+function openRewarded(onReward, freeIfNoAd){
+  if(Ads.ready('rewarded')){ openRealAd('rewarded', onReward); return; }
+  if(IS_APP){
+    if(freeIfNoAd){ toast(t('t_ad_free')); if(onReward) onReward(); }
+    else toast(t('t_ad_unavail'));
+    return;
+  }
   var m = el('rewardedModal'); m.hidden = false;
   el('rewardFoot').textContent = t('ad_reward_wait');
   runAdTimer(el('rewardBar'), el('rewardClose'), 4, t('ad_claim'), function(){
@@ -286,22 +315,34 @@ el('reviveBtn').addEventListener('click', function(){
     state = 'playing';
     showOverlay(null);
     updateHUD();
-    toast(t('t_revive'));
+    toast(t('t_revive')); sPower();
+    if(G.bossRef && !G.bossRef.dead) music.tense(true);
     // nếu không còn gì để bắn mà vẫn còn quỷ chưa spawn, game tiếp tục spawn bình thường
     if(G.toSpawn === 0 && G.demons.length === 0){ G.over = true; setTimeout(showWin, 400); }
-  });
+  }, true);
 });
 /* ---------------- main loop ---------------- */
+var lastDraw = 0;
 function loop(ts){
   var dt = Math.min(.033, (ts - lastT) / 1000 || 0);
   lastT = ts; elapsed += dt;
-  if(state === 'playing' && G && el('interstitialModal').hidden && el('rewardedModal').hidden){ update(dt); }
-  draw();
-  raf = requestAnimationFrame(loop);
+  raf = requestAnimationFrame(loop);   // đặt khung kế trước: lỗi trong một khung không làm đứng cả game
+  try{
+    var live = state === 'playing' && G && !realAdOn && el('interstitialModal').hidden && el('rewardedModal').hidden;
+    if(live) update(dt);
+    // menu / tạm dừng / bảng kết quả: chỉ vẽ ~20 khung/giây để đỡ tốn pin, đỡ nóng máy
+    if(live || ts - lastDraw > 48){ lastDraw = ts; draw(); }
+  }catch(e){ console.error(e); }
 }
+/* chuyển tab / tắt màn hình / ra ngoài app: tự tạm dừng, tắt tiếng */
+document.addEventListener('visibilitychange', function(){
+  if(document.hidden){ setPaused(true); if(AC && !realAdOn) AC.suspend(); }
+  else if(AC && !realAdOn) AC.resume();
+});
 /* ---------------- khởi động: áp dụng dữ liệu đã lưu ---------------- */
 document.querySelectorAll('.seg button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-diff') === diffKey); b.textContent = DIFFS[b.getAttribute('data-diff')].name; });
 el('soundBtn').textContent = soundOn ? '🔊' : '🔇';
+el('musicBtn').classList.toggle('off', !musicOn);
 el('coinCount').textContent = fmt(S.coins);
 selCh = LEVELS[Math.min(S.unlocked, LEVELS.length) - 1].ch;
 buildLevelGrid();
